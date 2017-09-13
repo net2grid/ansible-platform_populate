@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Remco Brink
+  description: Call a script to populate a development environment with customer data
+  license: license (BSD, MIT)
+  min_ansible_version: 2.0
+  platforms:
+  - name: Debian
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all
+  galaxy_tags:
+    - ldap
+
