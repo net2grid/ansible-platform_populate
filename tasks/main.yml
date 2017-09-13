@@ -1,2 +1,19 @@
 ---
-# tasks file for net2grid.platform_populate
+
+- name: Create nodes with status "success" for testusers
+  command:
+    /var/www/sites/platform-data-generator/bin/pdg nodes '{"{{ item.eui64 }}":1}'
+  with_items: {{ platform_populate }}
+  when: item.active === 'yes'
+
+- name: Create nodes with status "offline" for testusers
+  command:
+    /var/www/sites/platform-data-generator/bin/pdg nodes '{"{{ item.eui64 }}":0}'
+  with_items: {{ platform_populate }}
+  when: item.active === 'no'
+
+- name: Create nodes with status "unprovisioned" for testusers
+  command:
+    /var/www/sites/platform-data-generator/bin/pdg nodes '{"{{ item.eui64 }}":-1}'
+  with_items: {{ platform_populate }}
+  when: item.active === 'unprovisioned'
