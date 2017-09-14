@@ -2,18 +2,18 @@
 
 - name: Create nodes with status "success" for testusers
   command:
-    /var/www/sites/platform-data-generator/bin/pdg nodes '{"{{ item.eui64 }}":1}'
-  with_items: {{ platform_populate }}
-  when: item.active === 'yes'
+    /var/www/sites/platform-data-generator/bin/pdg nodes '{"{{ item.eui64|quote }}":1}'
+  with_items: "{{ platform_populate_users }}"
+  when: item.active is defined and item.active == 'yes'
 
 - name: Create nodes with status "offline" for testusers
   command:
-    /var/www/sites/platform-data-generator/bin/pdg nodes '{"{{ item.eui64 }}":0}'
-  with_items: {{ platform_populate }}
-  when: item.active === 'no'
+    /var/www/sites/platform-data-generator/bin/pdg nodes '{"{{ item.eui64|quote }}":0}'
+  with_items: "{{ platform_populate_users }}"
+  when: item.active is defined and item.active == 'no'
 
-- name: Create nodes with status "unprovisioned" for testusers
+- name: Create user accounts for testusers
   command:
-    /var/www/sites/platform-data-generator/bin/pdg nodes '{"{{ item.eui64 }}":-1}'
-  with_items: {{ platform_populate }}
-  when: item.active === 'unprovisioned'
+    curl -k {{ platform_populate_api_endpoint }} -d'{"mac_address":"{{ item.mac|quote }}","email_address":"{{ item.emailaddress|quote }}","pincode":"{{ item.pin|quote }}"}'
+  with_items: "{{ platform_populate_users }}"
+  when: item.mac is defined
