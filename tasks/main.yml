@@ -1,5 +1,8 @@
 ---
 
+- name: Flush all outstanding handlers
+  meta: flush_handlers
+
 - name: Create nodes with status "success" for testusers
   command:
     /var/www/sites/platform-data-generator/bin/pdg nodes '{"{{ item.eui64|quote }}":1}'
