@@ -16,7 +16,11 @@
   when: item.active is defined and item.active == 'no'
 
 - name: Create user accounts for testusers
-  command:
-    curl -k {{ platform_populate_api_endpoint }} -d'{"mac_address":"{{ item.mac|quote }}","email_address":"{{ item.emailaddress|quote }}","pincode":"{{ item.pin|quote }}"}'
+  uri:
+    url: "{{ platform_populate_api_endpoint }}"
+    method: POST
+    body: '{"mac_address":"{{ item.mac|quote }}","email_address":"{{ item.emailaddress|quote }}","pincode":"{{ item.pin|quote }}"}'
+    body_format: json
+    validate_certs: no
   with_items: "{{ platform_populate_users }}"
   when: item.mac is defined
