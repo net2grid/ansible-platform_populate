@@ -15,7 +15,7 @@
   with_items: "{{ platform_populate_users }}"
   when: item.active is defined and item.active == 'no'
 
-- name: Create user accounts for testusers
+- name: Create active user accounts for testusers
   uri:
     url: "{{ platform_populate_api_endpoint }}"
     method: POST
@@ -24,3 +24,13 @@
     validate_certs: no
   with_items: "{{ platform_populate_users }}"
   when: item.mac is defined and item.active == 'yes'
+
+- name: Create inactive user accounts for testusers
+  uri:
+    url: "{{ platform_populate_api_endpoint }}"
+    method: POST
+    body: '{"mac_address":"{{ item.mac|quote }}","email_address":"{{ item.emailaddress|quote }}","pincode":"{{ item.pin|quote }}","force":"true"}'
+    body_format: json
+    validate_certs: no
+  with_items: "{{ platform_populate_users }}"
+  when: item.mac is defined and item.active == 'no'
