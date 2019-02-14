@@ -23,4 +23,4 @@
     body_format: json
     validate_certs: no
   with_items: "{{ platform_populate_users }}"
-  when: item.mac is defined
+  when: item.mac is defined and item.active == 'yes'
